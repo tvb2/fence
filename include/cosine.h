@@ -1,10 +1,13 @@
 #pragma once
+#include "vect.h"
 
 class Cosine{
+    private:
+        Vect mVect;
     public:
         // cos of angle between a vector and axis (cos)
     double cosVect(vec const &vec, char const axis) {
-        double len = length(vec);
+        double len = mVect.length(vec);
         if (len > 0) {
             switch (axis) {
             case 'X':
@@ -18,4 +21,4 @@ class Cosine{
         }
         return -1;
         }
-    }
+    };
