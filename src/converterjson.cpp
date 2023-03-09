@@ -40,9 +40,7 @@ public:
 	 * @return contents of config.json of json datatype
 	 */
 	void ConverterJSON::getData(){
-
 			std::ifstream input;
-
 			//throw error if config.json file is missing
 			try {
 				input.open("config.json");
@@ -54,17 +52,18 @@ public:
 			}
 			input >> this->data;
 			input.close();
-		}
-
-	std::vector<std::vector<int>> ConverterJSON::getForest(){
-		int x, y;
-		for (auto item:data){
+			//update forest
+			this->forest.clear();
+			for (auto item:data){
 			this->tree[0] = item["x"];
 			this->tree[1] = item["y"];
 			this->forest.emplace_back(tree);
 		}
 		tree[0] = 0; tree[1] = 0;
-		return forest;
+		}
+
+	std::vector<std::vector<int>> ConverterJSON::getForest(){
+		return this->forest;
 	}
 
 	void ConverterJSON::addtree(std::vector<int> const &t){

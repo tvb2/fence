@@ -1,11 +1,11 @@
 #include <iostream>
 #include "converterjson.h"
+#include "vect.h"
 
 int main(int, char**) {
     ConverterJSON json;
-    // json.getData();
-    // json.getForest();
-    std::vector<int> t{43,78};
-    json.addtree(t);
+    Vect forest;
+    forest.getTrees(json.getForest());
+    forest.printTrees();
     std::cout << "Hello, world!\n";
 }

@@ -11,6 +11,8 @@ endif(WIN32)
 add_executable(fence 
                 main.cpp
                 ${INCLUDE_DIR}/converterjson.h converterjson.cpp
+                ${INCLUDE_DIR}/vect.h vect.cpp
+                
                 )
 
 target_include_directories(fence PUBLIC ${INCLUDE_DIR})
