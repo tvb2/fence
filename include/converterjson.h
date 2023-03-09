@@ -10,9 +10,9 @@
 
 class ConverterJSON{
 private:
-	nlohmann::json data;
+	nlohmann::json data = nlohmann::json::array();
 	std::vector<std::vector<int>> forest;
-	std::vector<int> tree;
+	std::vector<int> tree{0,0};
 public:
 	ConverterJSON();
 
@@ -20,10 +20,12 @@ public:
 	 * read data from config.json
 	 * @return contents of config.json of json datatype
 	 */
-	nlohmann::json getData();
+	void getData();
 
 	std::vector<std::vector<int>> getForest();
 
+	void addtree(std::vector<int> const &t);
 
+	void updateJSON();
 
 };

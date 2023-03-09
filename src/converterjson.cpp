@@ -5,6 +5,7 @@
 #include <fstream>
 #include <thread>
 #include <stdexcept>
+#include <string>
 
 //#define DEBUG_GETEXTDOCUMENTS
 
@@ -31,13 +32,14 @@ public:
 	ConverterJSON::ConverterJSON () {
 		//get data from config.json
 		this->getData();
+		this->getForest();
 	}
 
 	/**
 	 * read data from config.json
 	 * @return contents of config.json of json datatype
 	 */
-	nlohmann::json ConverterJSON::getData(){
+	void ConverterJSON::getData(){
 
 			std::ifstream input;
 
@@ -52,7 +54,6 @@ public:
 			}
 			input >> this->data;
 			input.close();
-			return data;
 		}
 
 	std::vector<std::vector<int>> ConverterJSON::getForest(){
@@ -62,5 +63,20 @@ public:
 			this->tree[1] = item["y"];
 			this->forest.emplace_back(tree);
 		}
+		tree[0] = 0; tree[1] = 0;
 		return forest;
 	}
+
+	void ConverterJSON::addtree(std::vector<int> const &t){
+		this->forest.emplace_back(t);
+		std::string name = "t"+std::to_string(forest.size());
+		this->data[name]["x"] = t[0];
+		this->data[name]["y"] = t[1];
+		this->updateJSON();
+	}
+
+	void ConverterJSON::updateJSON(){
+		std::ofstream update("config.json");
+		update << std::setw(4) << std::fixed << std::setprecision(4) << data;
+		update.close();
+	}	
