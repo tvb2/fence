@@ -11,7 +11,12 @@
         //if there are only three trees or less, then the fence will go through all of them
         if (trees.size() <= 3)
             return trees;
-        
+        vec current  = minmax.xmin;
+        fence.emplace_back(current);
+        vec next = minmax.ymax;
+        if (current != next){
+            
+        }
 
         return fence;
     }
