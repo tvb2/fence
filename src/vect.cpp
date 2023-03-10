@@ -7,8 +7,38 @@
         this->trees = t;
     }
 
-    vecvec Vect::outerTrees(vecvec& trees) {
-        return trees;
+    vecvec Vect::erectFence() {
+        //if there are only three trees or less, then the fence will go through all of them
+        if (trees.size() <= 3)
+            return trees;
+        
+
+        return fence;
+    }
+
+    /**
+     * @brief define outstanding trees (xmin, xmax, ymin and ymax)
+     * 
+     */
+    void Vect::findMinMax(){
+        for (auto tree:trees){
+            if (tree[0] < minmax.xmin[0]) {
+                minmax.xmin[0] = tree[0];
+                minmax.xmin[1] = tree[1];
+            }
+            if (tree[1] < minmax.ymin[1]) {
+                minmax.ymin[1] = tree[1];
+                minmax.ymin[0] = tree[0];
+            }
+            if (tree[0] > minmax.xmax[0]) {
+                minmax.xmax[0] = tree[0];
+                minmax.xmax[1] = tree[1];
+            }
+            if (tree[1] > minmax.ymax[1]) {
+                minmax.ymax[1] = tree[1];
+                minmax.ymax[0] = tree[0];
+            }
+        }
     }
 
     // vector coordinates given two points

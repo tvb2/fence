@@ -5,15 +5,32 @@
 typedef std::vector<std::vector<int>> vecvec;
 typedef std::vector<int> vec;
 
+//forest boundaries (most outstanding trees)
+//per taask, 0 < Xi, Yi < 100
+struct MinMax {
+  vec xmin = {100, 0};
+  vec xmax = {0, 0};
+  vec ymin = {0, 100};
+  vec ymax = {0, 0};
+};
+
 class Vect{
     private:
         vecvec trees;
+        MinMax minmax;
+        vecvec fence;
     public:
     void makevect(vec const &p1, vec const &p2);
 
     void getTrees(vecvec const &t);
 
-    vecvec outerTrees(vecvec& trees);
+    vecvec erectFence();
+
+    /**
+     * @brief define outstanding trees (xmin, xmax, ymin and ymax)
+     * 
+     */
+    void findMinMax();
 
     // vector coordinates given two points
     vec vecCoord(vec const &p1, vec const &p2);
