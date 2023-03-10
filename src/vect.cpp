@@ -11,20 +11,21 @@
     // find min route in the I area
     void Vect::findRouteI(double &cos,vec &current, vec &target) {
         vec next = target;
-        bool found{false};
+        bool foundV{false}, found{false};
         double cosTemp{0};
         std::map<int,int> buffer;
         for (auto tree:trees){
-            if (tree[0] >= current[0] && tree[1] > current[1] && tree[0] < target[0]){
+            if (tree[0] >= current[0] && tree[1] >= current[1] && tree[0] <= target[0]){
                 if (tree[0] == current[0]){
                     buffer[tree[1]] = current[0];
                     found = true;
                 }
-                if (!found){
+                if (!foundV){
                     cosTemp = cosVect(vecCoord(current,tree));
                     if (cosTemp <= cos){
                         cos = cosTemp;
                         next = tree;
+                        found = true;
                     }
                 }
             }
@@ -32,11 +33,14 @@
         if (!buffer.empty()){
             for (auto it = buffer.begin(); it != buffer.end(); ++it){
                 vec temp = {it->second, it->first};
-                fence.emplace_back(temp);
+                fenceMap.emplace(std::pair<std::vector<int>,int>(temp,1));
                 next = temp;
             }
         }
+        if (!foundV && !found)
+            return;
         cos = cosVect(vecCoord(next,target));
+        fenceMap.emplace(std::pair<std::vector<int>,int>(next,1));
         findRouteI(cos, next, target);
     }
 
@@ -49,15 +53,15 @@
         //search route from xmin to xmax
         vec current  = minmax.xmin;
         vec target = minmax.ymax;
-        fence.emplace_back(current);
+        fenceMap.emplace(std::pair<std::vector<int>,int>(current,1));
         if (current != target){
-            fence.emplace_back(target);
+            fenceMap.emplace(std::pair<std::vector<int>,int>(target,1));
             vec direct = vecCoord(current,target);
             double maxCos = cosVect(direct);
             findRouteI(maxCos, current, target);
-
-
         }
+        for (auto it = fenceMap.begin(); it != fenceMap.end(); ++it)
+            std::cout << "map: " << it->first[0] << ", " << it->first[1] << "\n";
         return fence;
     }
 

@@ -22,6 +22,7 @@ class Vect{
         MinMax minmax;
         vecvec fence;
         char quadrant = 'I';
+        std::map<std::vector<int>, int> fenceMap;
     public:
 
     void makevect(vec const &p1, vec const &p2);
