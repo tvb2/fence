@@ -12,12 +12,12 @@
         if (trees.size() <= 3)
             return trees;
         vec current  = minmax.xmin;
-        fence.emplace_back(current);
         vec next = minmax.ymax;
+        fence.emplace_back(current);
         if (current != next){
-            
+            vec direct = vecCoord(current,next);
+            double maxCos = cosVect(direct);
         }
-
         return fence;
     }
 
@@ -63,6 +63,14 @@
     // calculate length of vector given by two coordinates
     double Vect::length(vec const &vec) {
         return sqrt(pow((double)vec[1], 2) + pow((double)vec[0], 2));
+    }
+
+    double Vect::cosVect(vec const &vec) {
+        double len = length(vec);
+        if (len > 0) {
+            return ((double)vec[0] / len);
+        }
+        return -1;
     }
 
     void Vect::printTrees(){

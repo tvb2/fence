@@ -7,6 +7,7 @@ int main(int, char**) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
+    forest.erectFence();
     forest.printTrees();
     std::cout << "Hello, world!\n";
 }

@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include <cmath>
-#include <map>
 #include <string>
 
 typedef std::vector<std::vector<int>> vecvec;
@@ -21,15 +20,9 @@ class Vect{
         vecvec trees;
         MinMax minmax;
         vecvec fence;
-        std::map<std::string, std::vector<int>> min;
         char quadrant = 'I';
     public:
-    Vect(){
-        min.emplace(std::pair<std::string,std::vector<int>>("xmin",{100,0}));
-        min.emplace(std::pair<std::string,std::vector<int>>("xmax",{0,0}));
-        min.emplace(std::pair<std::string,std::vector<int>>("ymin",{0,100}));
-        min.emplace(std::pair<std::string,std::vector<int>>("ymax",{0,0}));
-    }
+
     void makevect(vec const &p1, vec const &p2);
 
     void getTrees(vecvec const &t);
@@ -50,6 +43,9 @@ class Vect{
 
     // calculate length of vector given by two coordinates
     double length(vec const &vec);
+
+    // cos of angle between a vector and axis (cos)
+    double cosVect(vec const &vec);
 
     void printTrees();
 
