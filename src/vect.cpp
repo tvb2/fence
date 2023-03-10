@@ -7,16 +7,56 @@
         this->trees = t;
     }
 
+
+    // find min route in the I area
+    void Vect::findRouteI(double &cos,vec &current, vec &target) {
+        vec next = target;
+        bool found{false};
+        double cosTemp{0};
+        std::map<int,int> buffer;
+        for (auto tree:trees){
+            if (tree[0] >= current[0] && tree[1] > current[1] && tree[0] < target[0]){
+                if (tree[0] == current[0]){
+                    buffer[tree[1]] = current[0];
+                    found = true;
+                }
+                if (!found){
+                    cosTemp = cosVect(vecCoord(current,tree));
+                    if (cosTemp <= cos){
+                        cos = cosTemp;
+                        next = tree;
+                    }
+                }
+            }
+        }
+        if (!buffer.empty()){
+            for (auto it = buffer.begin(); it != buffer.end(); ++it){
+                vec temp = {it->second, it->first};
+                fence.emplace_back(temp);
+                next = temp;
+            }
+        }
+        cos = cosVect(vecCoord(next,target));
+        findRouteI(cos, next, target);
+    }
+
+
     vecvec Vect::erectFence() {
         //if there are only three trees or less, then the fence will go through all of them
         if (trees.size() <= 3)
             return trees;
+
+        //search route from xmin to xmax
         vec current  = minmax.xmin;
-        vec next = minmax.ymax;
+        vec target = minmax.ymax;
         fence.emplace_back(current);
-        if (current != next){
-            vec direct = vecCoord(current,next);
+        if (current != target){
+            fence.emplace_back(target);
+            vec direct = vecCoord(current,target);
             double maxCos = cosVect(direct);
+            findRouteI(maxCos, current, target);
+
+
         }
         return fence;
     }

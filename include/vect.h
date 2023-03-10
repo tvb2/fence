@@ -2,6 +2,7 @@
 #include <vector>
 #include <cmath>
 #include <string>
+#include <map>
 
 typedef std::vector<std::vector<int>> vecvec;
 typedef std::vector<int> vec;
@@ -26,6 +27,9 @@ class Vect{
     void makevect(vec const &p1, vec const &p2);
 
     void getTrees(vecvec const &t);
+
+
+   void findRouteI(double &cos, vec &current, vec &next);
 
     vecvec erectFence();
 
