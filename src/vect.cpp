@@ -7,20 +7,15 @@
         this->trees = t;
     }
 
-
     // find min route in the I area
     void Vect::findRouteI(double &cos,vec &current, vec &target) {
         vec next = target;
-        bool foundV{false}, foundLess{false}, foundEqual{false};
+        bool foundLess{false}, foundEqual{false};
         double cosTemp{0};
-        std::map<int,int> vertical, path;
+        std::map<int,int> path;
         for (auto tree:trees){
-            if (tree[0] >= current[0] && tree[1] > current[1] && tree[0] <= target[0] && tree != target){
-                if (tree[0] == current[0]){
-                    vertical[tree[1]] = current[0];
-                    foundV = true;
-                }
-                if (!foundV && tree != target){
+            if (tree[0] > current[0] && tree[1] >= current[1] && tree[0] < target[0] && tree != target){
+                if (tree != target){
                     cosTemp = cosVect(vecCoord(current,tree));
                     if ((cos - cosTemp) > std::numeric_limits<double>::epsilon()){//cosTemp is less than cos
                         cos = cosTemp;
@@ -38,14 +33,7 @@
                 }
             }
         }
-        if (!vertical.empty()){
-            for (auto it = vertical.begin(); it != vertical.end(); ++it){
-                vec temp = {it->second, it->first};
-                fenceMap.emplace(std::pair<std::vector<int>,int>(temp,1));
-                next = temp;
-            }
-        }
-        if (!foundV && !foundLess && !foundEqual)
+        if (!foundLess && !foundEqual)
             return;
         cos = cosVect(vecCoord(next,target));
         if (!path.empty()){
@@ -142,17 +130,37 @@
                 minmax.xmin[0] = tree[0];
                 minmax.xmin[1] = tree[1];
             }
+            else if (tree[0] == minmax.xmin[0]){//choosing xmin with maximum Y
+                if (tree[1] > minmax.xmin[1]){
+                    minmax.xmin[1] = tree[1];
+                }
+            }
             if (tree[1] < minmax.ymin[1]) {
                 minmax.ymin[1] = tree[1];
                 minmax.ymin[0] = tree[0];
+            }
+            else if (tree[1] == minmax.ymin[1]){//choosing ymin with maximum X
+                if (tree[0] < minmax.ymin[0]){
+                    minmax.ymin[0] = tree[0];
+                }
             }
             if (tree[0] > minmax.xmax[0]) {
                 minmax.xmax[0] = tree[0];
                 minmax.xmax[1] = tree[1];
             }
+            else if (tree[0] == minmax.xmax[0]){//choosing xmax with minimum Y
+                if (tree[1] < minmax.xmax[1]){
+                    minmax.xmax[1] = tree[1];
+                }
+            }
             if (tree[1] > minmax.ymax[1]) {
                 minmax.ymax[1] = tree[1];
                 minmax.ymax[0] = tree[0];
+            }
+            else if (tree[1] == minmax.ymax[1]){//choosing ymax with maximum X
+                if (tree[0] > minmax.ymax[0]){
+                    minmax.ymax[0] = tree[0];
+                }
             }
         }
     }

@@ -20,7 +20,6 @@ class Vect{
     private:
         vecvec trees;
         vecvec fence;
-        char quadrant = 'I';
         std::map<std::vector<int>, int> fenceMap;
     public:
       MinMax minmax;
