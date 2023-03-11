@@ -44,13 +44,48 @@
         findRouteI(cos, next, target);
     }
 
+    // find min route in the IV area
+    void Vect::findRouteIV(double &cos, vec &current, vec &target){
+        vec next = target;
+        bool foundV{false}, found{false};
+        double cosTemp{0};
+        std::map<int,int> buffer;
+        for (auto tree:trees){
+            if (tree[0] > current[0] && tree[1] >= target[1] && tree != target){
+                if (tree[1] == current[1]){
+                    buffer[tree[0]] = current[1];
+                    foundV = true;
+                }
+                if (!foundV && tree != target){
+                    cosTemp = cosVect(vecCoord(current,tree));
+                    if (cosTemp >= cos){
+                        cos = cosTemp;
+                        next = tree;
+                        found = true;
+                    }
+                }
+            }
+        }
+        if (!buffer.empty()){
+            for (auto it = buffer.begin(); it != buffer.end(); ++it){
+                vec temp = {it->first, it->second};
+                fenceMap.emplace(std::pair<std::vector<int>,int>(temp,1));
+                next = temp;
+            }
+        }
+        if (!foundV && !found)
+            return;
+        cos = cosVect(vecCoord(next,target));
+        fenceMap.emplace(std::pair<std::vector<int>,int>(next,1));
+        findRouteIV(cos, next, target);
+    }
 
     vecvec Vect::erectFence() {
         //if there are only three trees or less, then the fence will go through all of them
         if (trees.size() <= 3)
             return trees;
 
-        //search route from xmin to xmax
+        //search route from xmin to ymax (Q-I)
         vec current  = minmax.xmin;
         vec target = minmax.ymax;
         fenceMap.emplace(std::pair<std::vector<int>,int>(current,1));
@@ -60,9 +95,26 @@
             double maxCos = cosVect(direct);
             findRouteI(maxCos, current, target);
         }
+        std::cout << "after Q-I pass: \n";
         for (auto it = fenceMap.begin(); it != fenceMap.end(); ++it)
-            std::cout << "map: " << it->first[0] << ", " << it->first[1] << "\n";
+            std::cout << "\tmap: " << it->first[0] << ", " << it->first[1] << "\n";
+        
+        //search route from ymax to xmax (Q-IV)
+        current  = minmax.ymax;
+        target = minmax.xmax;
+        fenceMap.emplace(std::pair<std::vector<int>,int>(current,1));
+        if (current != target){
+            fenceMap.emplace(std::pair<std::vector<int>,int>(target,1));
+            vec direct = vecCoord(current,target);
+            double maxCos = cosVect(direct);
+            findRouteIV(maxCos, current, target);
+        }
+        std::cout << "after Q-IV pass: \n";
+        for (auto it = fenceMap.begin(); it != fenceMap.end(); ++it)
+            std::cout << "\tmap: " << it->first[0] << ", " << it->first[1] << "\n";
+
         return fence;
+
     }
 
     /**

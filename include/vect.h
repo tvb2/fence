@@ -30,7 +30,9 @@ class Vect{
     void getTrees(vecvec const &t);
 
 
-   void findRouteI(double &cos, vec &current, vec &next);
+   void findRouteI(double &cos, vec &current, vec &target);
+
+   void findRouteIV(double &cos, vec &current, vec &target);
 
     vecvec erectFence();
 
