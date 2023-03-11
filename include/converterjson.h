@@ -14,13 +14,13 @@ private:
 	std::vector<std::vector<int>> forest;
 	std::vector<int> tree{0,0};
 public:
-	ConverterJSON();
+	ConverterJSON(const std::string &filename);
 
 	/**
 	 * read data from config.json
 	 * @return contents of config.json of json datatype
 	 */
-	void getData();
+	void getData(const std::string &filename );
 
 	std::vector<std::vector<int>> getForest();
 

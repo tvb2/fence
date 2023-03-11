@@ -3,7 +3,8 @@
 #include "vect.h"
 
 int main(int, char**) {
-    ConverterJSON json;
+    std::string file = "config.json";
+    ConverterJSON json(file);
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();

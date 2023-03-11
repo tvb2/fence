@@ -11,35 +11,50 @@
     // find min route in the I area
     void Vect::findRouteI(double &cos,vec &current, vec &target) {
         vec next = target;
-        bool foundV{false}, found{false};
+        bool foundV{false}, foundLess{false}, foundEqual{false};
         double cosTemp{0};
-        std::map<int,int> buffer;
+        std::map<int,int> vertical, path;
         for (auto tree:trees){
             if (tree[0] >= current[0] && tree[1] > current[1] && tree[0] <= target[0] && tree != target){
                 if (tree[0] == current[0]){
-                    buffer[tree[1]] = current[0];
+                    vertical[tree[1]] = current[0];
                     foundV = true;
                 }
                 if (!foundV && tree != target){
                     cosTemp = cosVect(vecCoord(current,tree));
-                    if (cosTemp <= cos){
+                    if ((cos - cosTemp) > std::numeric_limits<double>::epsilon()){//cosTemp is less than cos
                         cos = cosTemp;
                         next = tree;
-                        found = true;
+                        path.clear();
+                        foundLess = true;
+                        foundEqual = false;
+                    }
+                    else if(std::fabs(cos - cosTemp) < std::numeric_limits<double>::epsilon()){//cosTemp is equal to cos
+                        foundEqual = true;
+                        cos = cosTemp;
+                        next = tree;
+                        path[tree[0]] = tree[1];
                     }
                 }
             }
         }
-        if (!buffer.empty()){
-            for (auto it = buffer.begin(); it != buffer.end(); ++it){
+        if (!vertical.empty()){
+            for (auto it = vertical.begin(); it != vertical.end(); ++it){
                 vec temp = {it->second, it->first};
                 fenceMap.emplace(std::pair<std::vector<int>,int>(temp,1));
                 next = temp;
             }
         }
-        if (!foundV && !found)
+        if (!foundV && !foundLess && !foundEqual)
             return;
         cos = cosVect(vecCoord(next,target));
+        if (!path.empty()){
+            for (auto it = path.begin(); it != path.end(); ++it){
+                vec temp = {it->first, it->second};
+                fenceMap.emplace(std::pair<std::vector<int>,int>(temp,1));
+                next = temp;
+            }
+        }
         fenceMap.emplace(std::pair<std::vector<int>,int>(next,1));
         findRouteI(cos, next, target);
     }
@@ -49,11 +64,11 @@
         vec next = target;
         bool foundV{false}, found{false};
         double cosTemp{0};
-        std::map<int,int> buffer;
+        std::map<int,int> vertical;
         for (auto tree:trees){
-            if (tree[0] > current[0] && tree[1] >= target[1] && tree != target){
+            if (tree[0] >= current[0] && tree[1] >= target[1] && tree != target){
                 if (tree[1] == current[1]){
-                    buffer[tree[0]] = current[1];
+                    vertical[tree[0]] = current[1];
                     foundV = true;
                 }
                 if (!foundV && tree != target){
@@ -66,8 +81,8 @@
                 }
             }
         }
-        if (!buffer.empty()){
-            for (auto it = buffer.begin(); it != buffer.end(); ++it){
+        if (!vertical.empty()){
+            for (auto it = vertical.begin(); it != vertical.end(); ++it){
                 vec temp = {it->first, it->second};
                 fenceMap.emplace(std::pair<std::vector<int>,int>(temp,1));
                 next = temp;

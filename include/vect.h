@@ -19,12 +19,11 @@ struct MinMax {
 class Vect{
     private:
         vecvec trees;
-        MinMax minmax;
         vecvec fence;
         char quadrant = 'I';
         std::map<std::vector<int>, int> fenceMap;
     public:
-
+      MinMax minmax;
     void makevect(vec const &p1, vec const &p2);
 
     void getTrees(vecvec const &t);
@@ -34,7 +33,7 @@ class Vect{
 
    void findRouteIV(double &cos, vec &current, vec &target);
 
-    vecvec erectFence();
+   vecvec erectFence();
 
     /**
      * @brief define outstanding trees (xmin, xmax, ymin and ymax)
@@ -55,5 +54,7 @@ class Vect{
     double cosVect(vec const &vec);
 
     void printTrees();
+
+    std::map<std::vector<int>, int>& getFenceMap(){ return this->fenceMap;}
 
 };

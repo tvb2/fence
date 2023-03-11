@@ -29,9 +29,9 @@ public:
 	}
 };
 
-	ConverterJSON::ConverterJSON () {
+	ConverterJSON::ConverterJSON (const std::string &filename) {
 		//get data from config.json
-		this->getData();
+		this->getData(filename);
 		this->getForest();
 	}
 
@@ -39,11 +39,11 @@ public:
 	 * read data from config.json
 	 * @return contents of config.json of json datatype
 	 */
-	void ConverterJSON::getData(){
+	void ConverterJSON::getData(const std::string &filename){
 			std::ifstream input;
 			//throw error if config.json file is missing
 			try {
-				input.open("config.json");
+				input.open(filename);
 				if (!input.is_open())
 					throw ConfigMissingException();
 			}
