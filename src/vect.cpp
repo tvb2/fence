@@ -15,12 +15,12 @@
         double cosTemp{0};
         std::map<int,int> buffer;
         for (auto tree:trees){
-            if (tree[0] >= current[0] && tree[1] >= current[1] && tree[0] <= target[0]){
+            if (tree[0] >= current[0] && tree[1] > current[1] && tree[0] <= target[0] && tree != target){
                 if (tree[0] == current[0]){
                     buffer[tree[1]] = current[0];
-                    found = true;
+                    foundV = true;
                 }
-                if (!foundV){
+                if (!foundV && tree != target){
                     cosTemp = cosVect(vecCoord(current,tree));
                     if (cosTemp <= cos){
                         cos = cosTemp;
