@@ -189,3 +189,130 @@ TEST(TestVect, Test16) {
 	TestVectFunctionality(result, expected);
 }
 
+TEST(TestVect, Test17) {
+    std::string filename = "./cases/1-7.json";
+    ConverterJSON json(filename);
+    Vect forest;
+    forest.getTrees(json.getForest());
+    forest.findMinMax();
+    vec current  = forest.minmax.xmin;
+    vec target = forest.minmax.ymax;
+    vec direct = forest.vecCoord(current,target);
+    double maxCos = forest.cosVect(direct);
+
+    forest.findRouteI(maxCos,current,target);
+    std::map<std::vector<int>, int> fence = forest.getFenceMap();
+    vecvec result;
+    for (auto it = fence.begin(); it != fence.end(); ++it){
+        vec temp = {it->first[0], it->first[1]};
+        result.emplace_back(temp);
+    }
+    vecvec expected = {//except the first and last trees
+        {2,4},
+        {3,5},
+        {4,6}
+    };
+	TestVectFunctionality(result, expected);
+}
+
+TEST(TestVect, Test41) {
+    std::string filename = "./cases/4-1.json";
+    ConverterJSON json(filename);
+    Vect forest;
+    forest.getTrees(json.getForest());
+    forest.findMinMax();
+    vec current  = forest.minmax.ymax;
+    vec target = forest.minmax.xmax;
+    vec direct = forest.vecCoord(current,target);
+    double minCos = forest.cosVect(direct);
+
+    forest.findRouteIV(minCos,current,target);
+    std::map<std::vector<int>, int> fence = forest.getFenceMap();
+    vecvec result;
+    for (auto it = fence.begin(); it != fence.end(); ++it){
+        vec temp = {it->first[0], it->first[1]};
+        result.emplace_back(temp);
+    }
+    vecvec expected = {//except the first and last trees
+        {5,4},
+        {6,3},
+        {7,2}
+    };
+	TestVectFunctionality(result, expected);
+}
+
+TEST(TestVect, Test42) {
+    std::string filename = "./cases/4-2.json";
+    ConverterJSON json(filename);
+    Vect forest;
+    forest.getTrees(json.getForest());
+    forest.findMinMax();
+    vec current  = forest.minmax.ymax;
+    vec target = forest.minmax.xmax;
+    vec direct = forest.vecCoord(current,target);
+    double minCos = forest.cosVect(direct);
+
+    forest.findRouteIV(minCos,current,target);
+    std::map<std::vector<int>, int> fence = forest.getFenceMap();
+    vecvec result;
+    for (auto it = fence.begin(); it != fence.end(); ++it){
+        vec temp = {it->first[0], it->first[1]};
+        result.emplace_back(temp);
+    }
+    vecvec expected = {//except the first and last trees
+        {7,3},
+        {7,4}
+    };
+	TestVectFunctionality(result, expected);
+}
+
+TEST(TestVect, Test43) {
+    std::string filename = "./cases/4-3.json";
+    ConverterJSON json(filename);
+    Vect forest;
+    forest.getTrees(json.getForest());
+    forest.findMinMax();
+    vec current  = forest.minmax.ymax;
+    vec target = forest.minmax.xmax;
+    vec direct = forest.vecCoord(current,target);
+    double minCos = forest.cosVect(direct);
+
+    forest.findRouteIV(minCos,current,target);
+    std::map<std::vector<int>, int> fence = forest.getFenceMap();
+    vecvec result;
+    for (auto it = fence.begin(); it != fence.end(); ++it){
+        vec temp = {it->first[0], it->first[1]};
+        result.emplace_back(temp);
+    }
+    vecvec expected = {//except the first and last trees
+        {5,4},
+        {6,3}
+    };
+	TestVectFunctionality(result, expected);
+}
+
+
+TEST(TestVect, Test44) {
+    std::string filename = "./cases/4-4.json";
+    ConverterJSON json(filename);
+    Vect forest;
+    forest.getTrees(json.getForest());
+    forest.findMinMax();
+    vec current  = forest.minmax.ymax;
+    vec target = forest.minmax.xmax;
+    vec direct = forest.vecCoord(current,target);
+    double minCos = forest.cosVect(direct);
+
+    forest.findRouteIV(minCos,current,target);
+    std::map<std::vector<int>, int> fence = forest.getFenceMap();
+    vecvec result;
+    for (auto it = fence.begin(); it != fence.end(); ++it){
+        vec temp = {it->first[0], it->first[1]};
+        result.emplace_back(temp);
+    }
+    vecvec expected = {//except the first and last trees
+        {6,4}
+    };
+	TestVectFunctionality(result, expected);
+}
+
