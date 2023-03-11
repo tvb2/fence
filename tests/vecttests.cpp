@@ -23,7 +23,6 @@ void TestMinMaxFuncionality(const vecvec &expected){
 ASSERT_EQ(result, expected);
 }
 
-
 TEST(TestMinMax, MinMax) {
     MinMax minmax;
     minmax.xmin[0] = 2;
@@ -141,8 +140,8 @@ TEST(TestVect, Test14) {
 	TestVectFunctionality(result, expected);
 }
 
-TEST(TestVect, Test151) {
-    std::string filename = "./cases/1-5-1.json";
+TEST(TestVect, Test15) {
+    std::string filename = "./cases/1-5.json";
     ConverterJSON json(filename);
     Vect forest;
     forest.getTrees(json.getForest());
@@ -161,6 +160,31 @@ TEST(TestVect, Test151) {
     }
     vecvec expected = {//except the first and last trees
         {3,5}
+    };
+	TestVectFunctionality(result, expected);
+}
+
+TEST(TestVect, Test16) {
+    std::string filename = "./cases/1-6.json";
+    ConverterJSON json(filename);
+    Vect forest;
+    forest.getTrees(json.getForest());
+    forest.findMinMax();
+    vec current  = forest.minmax.xmin;
+    vec target = forest.minmax.ymax;
+    vec direct = forest.vecCoord(current,target);
+    double maxCos = forest.cosVect(direct);
+
+    forest.findRouteI(maxCos,current,target);
+    std::map<std::vector<int>, int> fence = forest.getFenceMap();
+    vecvec result;
+    for (auto it = fence.begin(); it != fence.end(); ++it){
+        vec temp = {it->first[0], it->first[1]};
+        result.emplace_back(temp);
+    }
+    vecvec expected = {//except the first and last trees
+        {2,1},
+        {3,1}
     };
 	TestVectFunctionality(result, expected);
 }
