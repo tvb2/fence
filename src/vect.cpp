@@ -221,7 +221,7 @@
             double maxCos = cosVect(direct);
             findRouteII(maxCos, current, target);
         }
-        std::cout << "after Q-III pass: \n";
+        std::cout << "after Q-II pass: \n";
         for (auto it = fenceMap.begin(); it != fenceMap.end(); ++it)
             std::cout << "\tmap: " << it->first[0] << ", " << it->first[1] << "\n";
 
