@@ -488,3 +488,34 @@ TEST(TestVect, Integration11) {
 	TestVectFunctionality(result, expected);
 }
 
+TEST(TestVect, Integration12) {
+    std::string filename = "./cases/i1-2.json";
+    ConverterJSON json(filename);
+    Vect forest;
+    forest.getTrees(json.getForest());
+    forest.findMinMax();
+    vecvec result = forest.erectFence();
+    vecvec expected = {//except the first and last trees
+        { 1, 4 }, 
+        { 1, 5 }, 
+        { 1, 6 }, 
+        { 2, 3 }, 
+        { 2, 7 }, 
+        { 3, 2 }, 
+        { 3, 8 }, 
+        { 4, 1 }, 
+        { 4, 9 }, 
+        { 5, 1 },
+        { 5, 9 }, 
+        { 6, 1 }, 
+        { 6, 9 }, 
+        { 7, 2 }, 
+        { 7, 8 }, 
+        { 8, 3 },
+        { 8, 4 }, 
+        { 8, 5 }, 
+        { 8, 6 }, 
+        { 8, 7 }
+    };
+	TestVectFunctionality(result, expected);
+}
