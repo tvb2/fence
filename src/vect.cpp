@@ -3,8 +3,6 @@
 #include <functional>
 #include "predicates.h"
 
-    void Vect::makevect(vec const &p1, vec const &p2){}
-
     void Vect::getTrees(vecvec const &t){
         this->trees = t;
     }
@@ -20,7 +18,7 @@
         vec next = target;
         bool foundBetter{false}, foundEqual{false};
         double cosTemp{0};
-        std::map<int,int> path;
+        std::map<vec,int> path;
         for (auto tree:trees){
             if (isValidTree(tree, starting, target)){
                 if (tree != starting){
@@ -29,7 +27,7 @@
                         cos = cosTemp;
                         next = tree;
                         path.clear();
-                        path[tree[0]] = tree[1];
+                        path[tree] = 1;
                         foundBetter = true;
                         foundEqual = false;
                     }
@@ -37,7 +35,7 @@
                         foundEqual = true;
                         cos = cosTemp;
                         next = tree;
-                        path[tree[0]] = tree[1];
+                        path[tree] = 1;
                     }
                 }
             }
@@ -46,7 +44,7 @@
             return;
         if (!path.empty()){
             for (auto it = path.begin(); it != path.end(); ++it){
-                vec temp = {it->first, it->second};
+                vec temp = {it->first};
                 fenceMap.emplace(std::pair<std::vector<int>,int>(temp,1));
                 next = temp;
             }

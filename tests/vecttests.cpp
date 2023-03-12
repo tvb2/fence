@@ -553,3 +553,25 @@ TEST(TestVect, Integration14) {
 	TestVectFunctionality(result, expected);
 }
 
+
+TEST(TestVect, Leetcode1) {
+    std::string filename = "./cases/l1.json";
+    ConverterJSON json(filename);
+    Vect forest;
+    forest.getTrees(json.getForest());
+    forest.findMinMax();
+    vecvec result = forest.erectFence();
+    vecvec expected = {//except the first and last trees
+        {0,0},
+        {0,1},
+        {0,2},
+        {1,0},
+        {2,0},
+        {3,0},
+        {3,1},
+        {3,2},
+        {3,3}
+    };
+	TestVectFunctionality(result, expected);
+}
+

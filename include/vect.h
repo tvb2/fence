@@ -23,9 +23,7 @@ class Vect{
         std::map<std::vector<int>, int> fenceMap;
     public:
       MinMax minmax;
-    void makevect(vec const &p1, vec const &p2);
-
-    void getTrees(vecvec const &t);
+   void getTrees(vecvec const &t);
 
    void findRoute(
         double &cos,
