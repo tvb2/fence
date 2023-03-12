@@ -27,6 +27,12 @@ class Vect{
 
     void getTrees(vecvec const &t);
 
+   void findRoute(
+        double &cos,
+        vec &starting, 
+        vec &target, 
+        bool (*isValidTree)(const vec &tree, const vec &starting, const vec &target),
+        bool (*isBetterCosine)(const double &cos, const double &cosTemp));
 
    void findRouteI(double &cos, vec &current, vec &target);
 

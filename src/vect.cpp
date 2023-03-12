@@ -1,5 +1,6 @@
 #include "vect.h"
 #include <iostream>
+#include <functional>
 
     void Vect::makevect(vec const &p1, vec const &p2){}
 
@@ -7,22 +8,47 @@
         this->trees = t;
     }
 
-    // find min route in the I area
-    void Vect::findRouteI(double &cos,vec &current, vec &target) {
+    bool validTreeI(const vec &tree, const vec &starting, const vec &target){
+        return tree[0] > starting[0] && tree[1] >= starting[1] && tree[0] < target[0] && tree != target;
+    }
+    bool validTreeII(const vec &tree, const vec &starting, const vec &target){
+        return tree[0] <= starting[0] && tree[1] > starting[1] && tree[1] < target[1] && tree != target;
+    }
+    bool validTreeIII(const vec &tree, const vec &starting, const vec &target){
+        return tree[0] < starting[0] && tree[1] <= starting[1] && tree[0] > target[0] && tree != target;
+    }
+    bool validTreeIV(const vec &tree, const vec &starting, const vec &target){
+        return tree[0] >= starting[0] && tree[1] > target[1] && tree[1] < starting[1] && tree != target;
+    }
+
+    bool isBetterCosine12(const double &cos, const double &cosTemp){
+        return ((cos - cosTemp) > std::numeric_limits<double>::epsilon());
+    }
+    bool isBetterCosine34(const double &cos, const double &cosTemp){
+        return ((cosTemp - cos) > std::numeric_limits<double>::epsilon());
+    }
+
+    void Vect::findRoute(
+        double &cos,
+        vec &starting, 
+        vec &target, 
+        bool (*isValidTree)(const vec &tree, const vec &starting, const vec &target),
+        bool (*isBetterCosine)(const double &cos, const double &cosTemp)
+        ){
         vec next = target;
-        bool foundLess{false}, foundEqual{false};
+        bool foundBetter{false}, foundEqual{false};
         double cosTemp{0};
         std::map<int,int> path;
         for (auto tree:trees){
-            if (tree[0] > current[0] && tree[1] >= current[1] && tree[0] < target[0] && tree != target){
-                if (tree != current){
-                    cosTemp = cosVect(vecCoord(current,tree));
-                    if ((cos - cosTemp) > std::numeric_limits<double>::epsilon()){//cosTemp is less than cos
+            if (isValidTree(tree, starting, target)){
+                if (tree != starting){
+                    cosTemp = cosVect(vecCoord(starting,tree));
+                    if (isBetterCosine(cos, cosTemp)){//cosTemp is better than cos
                         cos = cosTemp;
                         next = tree;
                         path.clear();
                         path[tree[0]] = tree[1];
-                        foundLess = true;
+                        foundBetter = true;
                         foundEqual = false;
                     }
                     else if(std::fabs(cos - cosTemp) < std::numeric_limits<double>::epsilon()){//cosTemp is equal to cos
@@ -34,7 +60,47 @@
                 }
             }
         }
-        if (!foundLess && !foundEqual)
+        if (!foundBetter && !foundEqual)
+            return;
+        if (!path.empty()){
+            for (auto it = path.begin(); it != path.end(); ++it){
+                vec temp = {it->first, it->second};
+                fenceMap.emplace(std::pair<std::vector<int>,int>(temp,1));
+                next = temp;
+            }
+        }
+        cos = cosVect(vecCoord(next,target));
+        findRoute(cos, next, target, (*isValidTree), (*isBetterCosine));
+    }
+
+    // find min route in the I area
+    void Vect::findRouteI(double &cos,vec &starting, vec &target) {
+        vec next = target;
+        bool foundBetter{false}, foundEqual{false};
+        double cosTemp{0};
+        std::map<int,int> path;
+        for (auto tree:trees){
+            if (tree[0] > starting[0] && tree[1] >= starting[1] && tree[0] < target[0] && tree != target){
+                if (tree != starting){
+                    cosTemp = cosVect(vecCoord(starting,tree));
+                    if ((cos - cosTemp) > std::numeric_limits<double>::epsilon()){//cosTemp is less than cos
+                        cos = cosTemp;
+                        next = tree;
+                        path.clear();
+                        path[tree[0]] = tree[1];
+                        foundBetter = true;
+                        foundEqual = false;
+                    }
+                    else if(std::fabs(cos - cosTemp) < std::numeric_limits<double>::epsilon()){//cosTemp is equal to cos
+                        foundEqual = true;
+                        cos = cosTemp;
+                        next = tree;
+                        path[tree[0]] = tree[1];
+                    }
+                }
+            }
+        }
+        if (!foundBetter && !foundEqual)
             return;
         if (!path.empty()){
             for (auto it = path.begin(); it != path.end(); ++it){
@@ -46,23 +112,22 @@
         cos = cosVect(vecCoord(next,target));
         findRouteI(cos, next, target);
     }
-
     // find min route in the IV area
-    void Vect::findRouteIV(double &cos, vec &current, vec &target){
+    void Vect::findRouteIV(double &cos, vec &starting, vec &target){
         vec next = target;
-        bool foundLarger{false}, foundEqual{false};
+        bool foundBetter{false}, foundEqual{false};
         double cosTemp{0};
         std::map<int,int> path;
         for (auto tree:trees){
-            if (tree[0] >= current[0] && tree[1] > target[1] && tree[1] < current[1] && tree != target){
-                if (tree != current){
-                    cosTemp = cosVect(vecCoord(current,tree));
+            if (tree[0] >= starting[0] && tree[1] > target[1] && tree[1] < starting[1] && tree != target){
+                if (tree != starting){
+                    cosTemp = cosVect(vecCoord(starting,tree));
                     if ((cosTemp - cos) > std::numeric_limits<double>::epsilon()){//cosTemp is larger than cos
                         cos = cosTemp;
                         next = tree;
                         path.clear();
                         path[tree[0]] = tree[1];
-                        foundLarger = true;
+                        foundBetter = true;
                         foundEqual = false;
                     }
                     else if(std::fabs(cos - cosTemp) < std::numeric_limits<double>::epsilon()){//cosTemp is equal to cos
@@ -74,7 +139,7 @@
                 }
             }
         }
-        if (!foundLarger && !foundEqual)
+        if (!foundBetter && !foundEqual)
             return;
         if (!path.empty()){
             for (auto it = path.begin(); it != path.end(); ++it){
@@ -86,23 +151,22 @@
         cos = cosVect(vecCoord(next,target));
         findRouteIV(cos, next, target);
     }
-
     // find min route in the III area
-    void Vect::findRouteIII(double &cos, vec &current, vec &target){
+    void Vect::findRouteIII(double &cos, vec &starting, vec &target){
         vec next = target;
-        bool foundLarger{false}, foundEqual{false};
+        bool foundBetter{false}, foundEqual{false};
         double cosTemp{0};
         std::map<int,int> path;
         for (auto tree:trees){
-            if (tree[0] < current[0] && tree[1] <= current[1] && tree[0] > target[0] && tree != target){
-                if (tree != current){
-                    cosTemp = cosVect(vecCoord(current,tree));
+            if (tree[0] < starting[0] && tree[1] <= starting[1] && tree[0] > target[0] && tree != target){
+                if (tree != starting){
+                    cosTemp = cosVect(vecCoord(starting,tree));
                     if ((cosTemp - cos) > std::numeric_limits<double>::epsilon()){//cosTemp is larger than cos
                         cos = cosTemp;
                         next = tree;
                         path.clear();
                         path[tree[0]] = tree[1];
-                        foundLarger = true;
+                        foundBetter = true;
                         foundEqual = false;
                     }
                     else if(std::fabs(cos - cosTemp) < std::numeric_limits<double>::epsilon()){//cosTemp is equal to cos
@@ -114,7 +178,7 @@
                 }
             }
         }
-        if (!foundLarger && !foundEqual)
+        if (!foundBetter && !foundEqual)
             return;
         if (!path.empty()){
             for (auto it = path.begin(); it != path.end(); ++it){
@@ -126,23 +190,22 @@
         cos = cosVect(vecCoord(next,target));
         findRouteIII(cos, next, target);
     }
-
     // find min route in the II area
-    void Vect::findRouteII(double &cos, vec &current, vec &target){
+    void Vect::findRouteII(double &cos, vec &starting, vec &target){
         vec next = target;
-        bool foundLess{false}, foundEqual{false};
+        bool foundBetter{false}, foundEqual{false};
         double cosTemp{0};
         std::map<int,int> path;
         for (auto tree:trees){
-            if (tree[0] <= current[0] && tree[1] > current[1] && tree[1] < target[1] && tree != target){
-                if (tree != current){
-                    cosTemp = cosVect(vecCoord(current,tree));
+            if (tree[0] <= starting[0] && tree[1] > starting[1] && tree[1] < target[1] && tree != target){
+                if (tree != starting){
+                    cosTemp = cosVect(vecCoord(starting,tree));
                     if ((cos - cosTemp) > std::numeric_limits<double>::epsilon()){//cosTemp is less than cos
                         cos = cosTemp;
                         next = tree;
                         path.clear();
                         path[tree[0]] = tree[1];
-                        foundLess = true;
+                        foundBetter = true;
                         foundEqual = false;
                     }
                     else if(std::fabs(cos - cosTemp) < std::numeric_limits<double>::epsilon()){//cosTemp is equal to cos
@@ -154,7 +217,7 @@
                 }
             }
         }
-        if (!foundLess && !foundEqual)
+        if (!foundBetter && !foundEqual)
             return;
         if (!path.empty()){
             for (auto it = path.begin(); it != path.end(); ++it){
@@ -173,53 +236,53 @@
             return trees;
 
         //search route from xmin to ymax (Q-I)
-        vec current  = minmax.xmin;
+        vec starting  = minmax.xmin;
         vec target = minmax.ymax;
-        fenceMap.emplace(std::pair<std::vector<int>,int>(current,1));
-        if (current != target){
+        fenceMap.emplace(std::pair<std::vector<int>,int>(starting,1));
+        if (starting != target){
             fenceMap.emplace(std::pair<std::vector<int>,int>(target,1));
-            vec direct = vecCoord(current,target);
+            vec direct = vecCoord(starting,target);
             double maxCos = cosVect(direct);
-            findRouteI(maxCos, current, target);
+            findRoute(maxCos, starting, target,validTreeI, isBetterCosine12);
         }
         std::cout << "after Q-I pass: \n";
         for (auto it = fenceMap.begin(); it != fenceMap.end(); ++it)
             std::cout << "\tmap: " << it->first[0] << ", " << it->first[1] << "\n";
         
         //search route from ymax to xmax (Q-IV)
-        current  = minmax.ymax;
+        starting  = minmax.ymax;
         target = minmax.xmax;
-        if (current != target){
+        if (starting != target){
             fenceMap.emplace(std::pair<std::vector<int>,int>(target,1));
-            vec direct = vecCoord(current,target);
+            vec direct = vecCoord(starting,target);
             double minCos = cosVect(direct);
-            findRouteIV(minCos, current, target);
+            findRoute(minCos, starting, target,validTreeIV, isBetterCosine34);
         }
         std::cout << "after Q-IV pass: \n";
         for (auto it = fenceMap.begin(); it != fenceMap.end(); ++it)
             std::cout << "\tmap: " << it->first[0] << ", " << it->first[1] << "\n";
 
         //search route from xmax to ymin (Q-III)
-        current  = minmax.xmax;
+        starting  = minmax.xmax;
         target = minmax.ymin;
-        if (current != target){
+        if (starting != target){
             fenceMap.emplace(std::pair<std::vector<int>,int>(target,1));
-            vec direct = vecCoord(current,target);
+            vec direct = vecCoord(starting,target);
             double minCos = cosVect(direct);
-            findRouteIII(minCos, current, target);
+            findRoute(minCos, starting, target,validTreeIII, isBetterCosine34);
         }
         std::cout << "after Q-III pass: \n";
         for (auto it = fenceMap.begin(); it != fenceMap.end(); ++it)
             std::cout << "\tmap: " << it->first[0] << ", " << it->first[1] << "\n";
 
         //search route from ymin to xmin (Q-II)
-        current  = minmax.ymin;
+        starting  = minmax.ymin;
         target = minmax.xmin;
-        if (current != target){
+        if (starting != target){
             fenceMap.emplace(std::pair<std::vector<int>,int>(target,1));
-            vec direct = vecCoord(current,target);
+            vec direct = vecCoord(starting,target);
             double maxCos = cosVect(direct);
-            findRouteII(maxCos, current, target);
+            findRoute(maxCos, starting, target,validTreeII, isBetterCosine12);
         }
         std::cout << "after Q-II pass: \n";
         for (auto it = fenceMap.begin(); it != fenceMap.end(); ++it)
