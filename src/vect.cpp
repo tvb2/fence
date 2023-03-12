@@ -36,7 +36,6 @@
         }
         if (!foundLess && !foundEqual)
             return;
-        cos = cosVect(vecCoord(next,target));
         if (!path.empty()){
             for (auto it = path.begin(); it != path.end(); ++it){
                 vec temp = {it->first, it->second};
@@ -44,6 +43,7 @@
                 next = temp;
             }
         }
+        cos = cosVect(vecCoord(next,target));
         findRouteI(cos, next, target);
     }
 
@@ -76,7 +76,6 @@
         }
         if (!foundLarger && !foundEqual)
             return;
-        cos = cosVect(vecCoord(next,target));
         if (!path.empty()){
             for (auto it = path.begin(); it != path.end(); ++it){
                 vec temp = {it->first, it->second};
@@ -84,6 +83,7 @@
                 next = temp;
             }
         }
+        cos = cosVect(vecCoord(next,target));
         findRouteIV(cos, next, target);
     }
 
@@ -116,7 +116,6 @@
         }
         if (!foundLarger && !foundEqual)
             return;
-        cos = cosVect(vecCoord(next,target));
         if (!path.empty()){
             for (auto it = path.begin(); it != path.end(); ++it){
                 vec temp = {it->first, it->second};
@@ -124,6 +123,7 @@
                 next = temp;
             }
         }
+        cos = cosVect(vecCoord(next,target));
         findRouteIII(cos, next, target);
     }
 
@@ -156,7 +156,6 @@
         }
         if (!foundLess && !foundEqual)
             return;
-        cos = cosVect(vecCoord(next,target));
         if (!path.empty()){
             for (auto it = path.begin(); it != path.end(); ++it){
                 vec temp = {it->first, it->second};
@@ -164,6 +163,7 @@
                 next = temp;
             }
         }
+        cos = cosVect(vecCoord(next,target));
         findRouteII(cos, next, target);
     }
 
