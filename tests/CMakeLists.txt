@@ -30,6 +30,7 @@ include_directories(
         ${gtest_SOURCE_DIR}/include
         ${gtest_SOURCE_DIR}
         ${INCLUDE_DIR}
+                
 )
 
 set(gtest_disable_pthreads on)
@@ -43,6 +44,7 @@ enable_testing()
 add_executable(Google_Tests_run
         ${INCLUDE_DIR}/converterjson.h ${SOURCE_DIR}/converterjson.cpp
         ${INCLUDE_DIR}/vect.h ${SOURCE_DIR}/vect.cpp
+        ${INCLUDE_DIR}/predicates.h ${SOURCE_DIR}/predicates.cpp
         vecttests.cpp
         )
 

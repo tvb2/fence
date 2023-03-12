@@ -1,33 +1,34 @@
 #include "vect.h"
 #include <iostream>
 #include <functional>
+#include "predicates.h"
 
     void Vect::makevect(vec const &p1, vec const &p2){}
 
     void Vect::getTrees(vecvec const &t){
         this->trees = t;
     }
-
-    bool validTreeI(const vec &tree, const vec &starting, const vec &target){
+/*
+    bool Vect::validTreeI(const vec &tree, const vec &starting, const vec &target){
         return tree[0] > starting[0] && tree[1] >= starting[1] && tree[0] < target[0] && tree != target;
     }
-    bool validTreeII(const vec &tree, const vec &starting, const vec &target){
+    bool Vect::validTreeII(const vec &tree, const vec &starting, const vec &target){
         return tree[0] <= starting[0] && tree[1] > starting[1] && tree[1] < target[1] && tree != target;
     }
-    bool validTreeIII(const vec &tree, const vec &starting, const vec &target){
+    bool Vect::validTreeIII(const vec &tree, const vec &starting, const vec &target){
         return tree[0] < starting[0] && tree[1] <= starting[1] && tree[0] > target[0] && tree != target;
     }
-    bool validTreeIV(const vec &tree, const vec &starting, const vec &target){
+    bool Vect::validTreeIV(const vec &tree, const vec &starting, const vec &target){
         return tree[0] >= starting[0] && tree[1] > target[1] && tree[1] < starting[1] && tree != target;
     }
 
-    bool isBetterCosine12(const double &cos, const double &cosTemp){
+    bool Vect::isBetterCosine12(const double &cos, const double &cosTemp){
         return ((cos - cosTemp) > std::numeric_limits<double>::epsilon());
     }
-    bool isBetterCosine34(const double &cos, const double &cosTemp){
+    bool Vect::isBetterCosine34(const double &cos, const double &cosTemp){
         return ((cosTemp - cos) > std::numeric_limits<double>::epsilon());
     }
-
+*/
     void Vect::findRoute(
         double &cos,
         vec &starting, 
@@ -72,7 +73,7 @@
         cos = cosVect(vecCoord(next,target));
         findRoute(cos, next, target, (*isValidTree), (*isBetterCosine));
     }
-
+/*
     // find min route in the I area
     void Vect::findRouteI(double &cos,vec &starting, vec &target) {
         vec next = target;
@@ -229,7 +230,7 @@
         cos = cosVect(vecCoord(next,target));
         findRouteII(cos, next, target);
     }
-
+*/
     vecvec Vect::erectFence() {
         //if there are only three trees or less, then the fence will go through all of them
         if (trees.size() <= 3)
@@ -243,7 +244,7 @@
             fenceMap.emplace(std::pair<std::vector<int>,int>(target,1));
             vec direct = vecCoord(starting,target);
             double maxCos = cosVect(direct);
-            findRoute(maxCos, starting, target,validTreeI, isBetterCosine12);
+            findRoute(maxCos, starting, target, validTreeI, isBetterCosine12);
         }
         std::cout << "after Q-I pass: \n";
         for (auto it = fenceMap.begin(); it != fenceMap.end(); ++it)

@@ -12,6 +12,7 @@ add_executable(fence
                 main.cpp
                 ${INCLUDE_DIR}/converterjson.h converterjson.cpp
                 ${INCLUDE_DIR}/vect.h vect.cpp
+                ${INCLUDE_DIR}/predicates.h predicates.cpp
                 
                 )
 

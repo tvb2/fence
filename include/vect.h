@@ -26,14 +26,22 @@ class Vect{
     void makevect(vec const &p1, vec const &p2);
 
     void getTrees(vecvec const &t);
+/*
+    static bool validTreeI(const vec &tree, const vec &starting, const vec &target);
+    static bool validTreeII(const vec &tree, const vec &starting, const vec &target);
+    static bool validTreeIII(const vec &tree, const vec &starting, const vec &target);
+    static bool validTreeIV(const vec &tree, const vec &starting, const vec &target);
 
+    static bool isBetterCosine12(const double &cos, const double &cosTemp);
+    static bool isBetterCosine34(const double &cos, const double &cosTemp);
+*/
    void findRoute(
         double &cos,
         vec &starting, 
         vec &target, 
         bool (*isValidTree)(const vec &tree, const vec &starting, const vec &target),
         bool (*isBetterCosine)(const double &cos, const double &cosTemp));
-
+/*
    void findRouteI(double &cos, vec &current, vec &target);
 
    void findRouteIV(double &cos, vec &current, vec &target);
@@ -41,7 +49,7 @@ class Vect{
    void findRouteIII(double &cos, vec &current, vec &target);
 
    void findRouteII(double &cos, vec &current, vec &target);
-
+*/
    vecvec erectFence();
 
     /**

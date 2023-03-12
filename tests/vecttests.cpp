@@ -2,6 +2,7 @@
 #include <string>
 #include "vect.h"
 #include "converterjson.h"
+#include "predicates.h"
 #include "gtest/gtest.h"
 #include <sstream>
 #include <filesystem>
@@ -46,12 +47,12 @@ TEST(TestVect, Test11) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.xmin;
+    vec starting  = forest.minmax.xmin;
     vec target = forest.minmax.ymax;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double maxCos = forest.cosVect(direct);
 
-    forest.findRouteI(maxCos,current,target);
+    forest.findRoute(maxCos, starting, target,validTreeI, isBetterCosine12);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -72,12 +73,12 @@ TEST(TestVect, Test12) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.xmin;
+    vec starting  = forest.minmax.xmin;
     vec target = forest.minmax.ymax;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double maxCos = forest.cosVect(direct);
 
-    forest.findRouteI(maxCos,current,target);
+    forest.findRoute(maxCos, starting, target,validTreeI, isBetterCosine12);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -96,12 +97,12 @@ TEST(TestVect, Test13) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.xmin;
+    vec starting  = forest.minmax.xmin;
     vec target = forest.minmax.ymax;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double maxCos = forest.cosVect(direct);
 
-    forest.findRouteI(maxCos,current,target);
+    forest.findRoute(maxCos, starting, target,validTreeI, isBetterCosine12);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -121,12 +122,12 @@ TEST(TestVect, Test14) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.xmin;
+    vec starting  = forest.minmax.xmin;
     vec target = forest.minmax.ymax;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double maxCos = forest.cosVect(direct);
 
-    forest.findRouteI(maxCos,current,target);
+    forest.findRoute(maxCos, starting, target,validTreeI, isBetterCosine12);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -146,12 +147,12 @@ TEST(TestVect, Test15) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.xmin;
+    vec starting  = forest.minmax.xmin;
     vec target = forest.minmax.ymax;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double maxCos = forest.cosVect(direct);
 
-    forest.findRouteI(maxCos,current,target);
+    forest.findRoute(maxCos, starting, target,validTreeI, isBetterCosine12);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -170,12 +171,12 @@ TEST(TestVect, Test16) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.xmin;
+    vec starting  = forest.minmax.xmin;
     vec target = forest.minmax.ymax;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double maxCos = forest.cosVect(direct);
 
-    forest.findRouteI(maxCos,current,target);
+    forest.findRoute(maxCos, starting, target,validTreeI, isBetterCosine12);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -195,12 +196,12 @@ TEST(TestVect, Test17) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.xmin;
+    vec starting  = forest.minmax.xmin;
     vec target = forest.minmax.ymax;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double maxCos = forest.cosVect(direct);
 
-    forest.findRouteI(maxCos,current,target);
+    forest.findRoute(maxCos, starting, target,validTreeI, isBetterCosine12);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -221,12 +222,12 @@ TEST(TestVect, Test41) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.ymax;
+    vec starting  = forest.minmax.ymax;
     vec target = forest.minmax.xmax;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double minCos = forest.cosVect(direct);
 
-    forest.findRouteIV(minCos,current,target);
+    forest.findRoute(minCos, starting, target,validTreeIV, isBetterCosine34);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -247,12 +248,12 @@ TEST(TestVect, Test42) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.ymax;
+    vec starting  = forest.minmax.ymax;
     vec target = forest.minmax.xmax;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double minCos = forest.cosVect(direct);
 
-    forest.findRouteIV(minCos,current,target);
+    forest.findRoute(minCos, starting, target,validTreeIV, isBetterCosine34);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -272,12 +273,12 @@ TEST(TestVect, Test43) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.ymax;
+    vec starting  = forest.minmax.ymax;
     vec target = forest.minmax.xmax;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double minCos = forest.cosVect(direct);
 
-    forest.findRouteIV(minCos,current,target);
+    forest.findRoute(minCos, starting, target,validTreeIV, isBetterCosine34);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -297,12 +298,12 @@ TEST(TestVect, Test44) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.ymax;
+    vec starting  = forest.minmax.ymax;
     vec target = forest.minmax.xmax;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double minCos = forest.cosVect(direct);
 
-    forest.findRouteIV(minCos,current,target);
+    forest.findRoute(minCos, starting, target,validTreeIV, isBetterCosine34);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -321,12 +322,12 @@ TEST(TestVect, Test31) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.xmax;
+    vec starting  = forest.minmax.xmax;
     vec target = forest.minmax.ymin;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double minCos = forest.cosVect(direct);
 
-    forest.findRouteIII(minCos,current,target);
+    forest.findRoute(minCos, starting, target,validTreeIII, isBetterCosine34);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -345,12 +346,12 @@ TEST(TestVect, Test32) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.xmax;
+    vec starting  = forest.minmax.xmax;
     vec target = forest.minmax.ymin;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double minCos = forest.cosVect(direct);
 
-    forest.findRouteIII(minCos,current,target);
+    forest.findRoute(minCos, starting, target,validTreeIII, isBetterCosine34);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -370,12 +371,12 @@ TEST(TestVect, Test33) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.xmax;
+    vec starting  = forest.minmax.xmax;
     vec target = forest.minmax.ymin;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double minCos = forest.cosVect(direct);
 
-    forest.findRouteIII(minCos,current,target);
+    forest.findRoute(minCos, starting, target,validTreeIII, isBetterCosine34);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -395,12 +396,12 @@ TEST(TestVect, Test21) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.ymin;
+    vec starting  = forest.minmax.ymin;
     vec target = forest.minmax.xmin;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double maxCos = forest.cosVect(direct);
 
-    forest.findRouteII(maxCos,current,target);
+    forest.findRoute(maxCos, starting, target,validTreeII, isBetterCosine12);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -420,12 +421,12 @@ TEST(TestVect, Test22) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.ymin;
+    vec starting  = forest.minmax.ymin;
     vec target = forest.minmax.xmin;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double maxCos = forest.cosVect(direct);
 
-    forest.findRouteII(maxCos,current,target);
+    forest.findRoute(maxCos, starting, target,validTreeII, isBetterCosine12);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
@@ -445,12 +446,12 @@ TEST(TestVect, Test23) {
     Vect forest;
     forest.getTrees(json.getForest());
     forest.findMinMax();
-    vec current  = forest.minmax.ymin;
+    vec starting  = forest.minmax.ymin;
     vec target = forest.minmax.xmin;
-    vec direct = forest.vecCoord(current,target);
+    vec direct = forest.vecCoord(starting,target);
     double maxCos = forest.cosVect(direct);
 
-    forest.findRouteII(maxCos,current,target);
+    forest.findRoute(maxCos, starting, target,validTreeII, isBetterCosine12);
     std::map<std::vector<int>, int> fence = forest.getFenceMap();
     vecvec result;
     for (auto it = fence.begin(); it != fence.end(); ++it){
