@@ -9,6 +9,6 @@ int main(int, char**) {
     forest.getTrees(json.getForest());
     forest.findMinMax();
     forest.erectFence();
-    // forest.printTrees();
+    forest.printTrees();
     std::cout << "Hello, world!\n";
 }
