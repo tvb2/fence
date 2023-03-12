@@ -32,6 +32,10 @@ class Vect{
 
    void findRouteIV(double &cos, vec &current, vec &target);
 
+   void findRouteIII(double &cos, vec &current, vec &target);
+
+   void findRouteII(double &cos, vec &current, vec &target);
+
    vecvec erectFence();
 
     /**

@@ -84,8 +84,87 @@
                 next = temp;
             }
         }
-        // fenceMap.emplace(std::pair<std::vector<int>,int>(next,1));
         findRouteIV(cos, next, target);
+    }
+
+    // find min route in the III area
+    void Vect::findRouteIII(double &cos, vec &current, vec &target){
+        vec next = target;
+        bool foundLarger{false}, foundEqual{false};
+        double cosTemp{0};
+        std::map<int,int> path;
+        for (auto tree:trees){
+            if (tree[0] < current[0] && tree[1] <= current[1] && tree[0] > target[0] && tree != target){
+                if (tree != current){
+                    cosTemp = cosVect(vecCoord(current,tree));
+                    if ((cosTemp - cos) > std::numeric_limits<double>::epsilon()){//cosTemp is larger than cos
+                        cos = cosTemp;
+                        next = tree;
+                        path.clear();
+                        path[tree[0]] = tree[1];
+                        foundLarger = true;
+                        foundEqual = false;
+                    }
+                    else if(std::fabs(cos - cosTemp) < std::numeric_limits<double>::epsilon()){//cosTemp is equal to cos
+                        foundEqual = true;
+                        cos = cosTemp;
+                        next = tree;
+                        path[tree[0]] = tree[1];
+                    }
+                }
+            }
+        }
+        if (!foundLarger && !foundEqual)
+            return;
+        cos = cosVect(vecCoord(next,target));
+        if (!path.empty()){
+            for (auto it = path.begin(); it != path.end(); ++it){
+                vec temp = {it->first, it->second};
+                fenceMap.emplace(std::pair<std::vector<int>,int>(temp,1));
+                next = temp;
+            }
+        }
+        findRouteIII(cos, next, target);
+    }
+
+    // find min route in the II area
+    void Vect::findRouteII(double &cos, vec &current, vec &target){
+        vec next = target;
+        bool foundLess{false}, foundEqual{false};
+        double cosTemp{0};
+        std::map<int,int> path;
+        for (auto tree:trees){
+            if (tree[0] <= current[0] && tree[1] > current[1] && tree[1] < target[1] && tree != target){
+                if (tree != current){
+                    cosTemp = cosVect(vecCoord(current,tree));
+                    if ((cos - cosTemp) > std::numeric_limits<double>::epsilon()){//cosTemp is less than cos
+                        cos = cosTemp;
+                        next = tree;
+                        path.clear();
+                        path[tree[0]] = tree[1];
+                        foundLess = true;
+                        foundEqual = false;
+                    }
+                    else if(std::fabs(cos - cosTemp) < std::numeric_limits<double>::epsilon()){//cosTemp is equal to cos
+                        foundEqual = true;
+                        cos = cosTemp;
+                        next = tree;
+                        path[tree[0]] = tree[1];
+                    }
+                }
+            }
+        }
+        if (!foundLess && !foundEqual)
+            return;
+        cos = cosVect(vecCoord(next,target));
+        if (!path.empty()){
+            for (auto it = path.begin(); it != path.end(); ++it){
+                vec temp = {it->first, it->second};
+                fenceMap.emplace(std::pair<std::vector<int>,int>(temp,1));
+                next = temp;
+            }
+        }
+        findRouteII(cos, next, target);
     }
 
     vecvec Vect::erectFence() {
@@ -120,8 +199,37 @@
         for (auto it = fenceMap.begin(); it != fenceMap.end(); ++it)
             std::cout << "\tmap: " << it->first[0] << ", " << it->first[1] << "\n";
 
-        return fence;
+        //search route from xmax to ymin (Q-III)
+        current  = minmax.xmax;
+        target = minmax.ymin;
+        if (current != target){
+            fenceMap.emplace(std::pair<std::vector<int>,int>(target,1));
+            vec direct = vecCoord(current,target);
+            double minCos = cosVect(direct);
+            findRouteIII(minCos, current, target);
+        }
+        std::cout << "after Q-III pass: \n";
+        for (auto it = fenceMap.begin(); it != fenceMap.end(); ++it)
+            std::cout << "\tmap: " << it->first[0] << ", " << it->first[1] << "\n";
 
+        //search route from ymin to xmin (Q-II)
+        current  = minmax.ymin;
+        target = minmax.xmin;
+        if (current != target){
+            fenceMap.emplace(std::pair<std::vector<int>,int>(target,1));
+            vec direct = vecCoord(current,target);
+            double maxCos = cosVect(direct);
+            findRouteII(maxCos, current, target);
+        }
+        std::cout << "after Q-III pass: \n";
+        for (auto it = fenceMap.begin(); it != fenceMap.end(); ++it)
+            std::cout << "\tmap: " << it->first[0] << ", " << it->first[1] << "\n";
+
+
+        for (auto it = fenceMap.begin(); it != fenceMap.end(); ++it)
+            // vec temp = {it->first, it->second};
+            fence.emplace_back(it->first);
+        return fence;
     }
 
     /**
