@@ -24,7 +24,7 @@ I decided to 'invent the wheel' - develop my solution without trying to investig
 
 Still, I wanted to keep it and share it for two purposes:
 * it is not a good idea to 'reinvent the wheel'
-* to boast my 'skills' :-) - to be able to track my progress in both learning algorythms and C++.
+* to boast my 'skills' :-) - to be able to track my progress in both learning algorithms and C++.
 
 ## Summary
 
