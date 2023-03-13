@@ -1,4 +1,4 @@
-# Leetcode problem 587. Erect the Fencefence
+# Leetcode problem 587. Erect the Fence
 
 # The problem
 The problem can be found [here](https://leetcode.com/problems/erect-the-fence/).
@@ -9,7 +9,7 @@ Return the coordinates of trees that are exactly located on the fence perimeter.
 
 ![ExampleOne](./docs/erect1-plane.jpg)
 
-For the picture avove
+For the picture above
 >Input: trees = [[1,1],[2,2],[2,0],[2,4],[3,3],[4,2]]
 
 >Output: [[1,1],[2,0],[4,2],[3,3],[2,4]]
@@ -24,7 +24,7 @@ I decided to 'invent the wheel' - develop my solution without trying to investig
 
 Still, I wanted to keep it and share it for two purposes:
 * it is not a good idea to 'reinvent the wheel'
-* to boast my 'skills' :-)
+* to boast my 'skills' :-) - to be able to track my progress in both learning algorythms and C++.
 
 ## Summary
 
@@ -32,11 +32,11 @@ First of all, if there are three trees or less, than all the trees must be inclu
 
 If there are more trees, than the logic below kicks in.
 
-My idea was first to find most outstanding points : xmin, ymax, xmax and ymin (note, some of these points may coincide!). In case there are several points that meet criteria (for example, xmin = [1,1], [1,2], [1,3] etc), than select thath would be the last if you walk around the forest clockwise (in this case xmin = [1,3]).
+My idea was first to find most outstanding points : xmin, ymax, xmax and ymin (note, some of these points may coincide!). In case there are several points that meet criteria (for example, if minimum X = 1, than all following trees could be xmin: [1,1], [1,2], [1,3] etc. We select the one that would be the last when you walk around the forest clockwise (in this case xmin = [1,3]).
 
 Next step would be to start walking the path xmin -> ymax -> xmax -> ymin -> xmin. Using convention <b>starting</b> -> <b>target</b> points (e.g. starting = xmin, target = ymax. Also using <b>next</b> as the next point in the path.
 
-While walking around the forest (in this case clockwise), always choose the next tree to be most left one as you walk. Use calculated cosine of the vector (start -> next) and compare it with the cosine of vector (starting -> target). There are several special cases that are taken into account 
+While walking around the forest (in this case clockwise), always choose the next tree to be most left one as you walk. Use calculated cosine of the vector (start -> next) and compare it with the refernce cosine of vector (starting -> target). There are several special cases that are taken into account.
 
 Thus, there are four sections we need to walk.
 
@@ -65,7 +65,7 @@ Now, depending on the quadrant you are measuring, a 'better' cosine may be eithe
 
 Once we find the next point, we reassign starting = next and recursively call the same search function until the next = target.
 
-Then we proceed to the next pair of starting -> target trees.
+Then we proceed to the next pair of starting -> target trees. Thus, our path in terms of cosine circle quadrants will be I -> IV -> III -> II
 
 There are special cases:
 
